@@ -7,6 +7,6 @@ namespace Auth.Domain.ValueObjects
 
         [RegularExpression("^[А-ЯЁа-яё]{3,}$")] string LastName,
 
-        [RegularExpression("^[А-ЯЁа-яё]{3,}$")] string? Patronymic
+        [RegularExpression("^[А-ЯЁа-яё]{5,}$")] string? Patronymic
     );
 }
