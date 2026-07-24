@@ -1,6 +1,6 @@
 ﻿using Auth.Domain.ValueObjects;
 
-namespace Auth.Application.Dtos
+namespace Auth.Application.Dtos.Register
 {
     public record RegisterDto(
         FullName FullName, 
