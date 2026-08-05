@@ -30,23 +30,12 @@ apiGroup.MapPost(@"register", async (
     [FromBody] RegisterDto register,
     CancellationToken token) => 
 {
-    HashedPassport hashedPassport = await service.HashPassportAsync(
-        register.Passport, 
-        token
-    );
+    var result = await service.TryToRegister(
+        register.FullName,
+        register.Passport,
+        token);
 
-    //var result = await service.TryToRegister(
-    //    register.FullName,
-    //    hashedPassport, 
-    //    token
-    //);
-
-    //if (result.IsFailure)
-    //    return Results.NotFound();
-
-    //return Results.Ok(result.Value);
-
-    return Results.Ok();
+    return Results.Ok(result);
 });
 
 app.Run();

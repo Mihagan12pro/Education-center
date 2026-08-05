@@ -1,16 +1,22 @@
 ﻿using Auth.Application.Abstraction;
 using Auth.Application.Dtos.Register;
 using Auth.Domain.ValueObjects;
-using CSharpFunctionalExtensions;
 using System.Security.Cryptography;
 using System.Text;
+using Auth.Application.Abstraction.Repositories;
+using Auth.Application.Infrastructure.Security;
 
 namespace Auth.Application.Implementetions
 {
     internal class RegisterService : IRegisterService
     {
-        public async Task<HashedPassport> HashPassportAsync(
-            Passport passport, 
+        private readonly IWriteUsersRepository _writeUsersRepository;  
+        private readonly IPasswordGenerator _passwordGenerator;
+        private readonly ILoginGenerator _loginGenerator;
+
+        public async Task<SuccessRegisterDto> TryToRegister(
+            FullName fullName, 
+            Passport passport,
             CancellationToken token)
         {
             SHA256 sha256 = SHA256.Create();
@@ -18,17 +24,29 @@ namespace Auth.Application.Implementetions
             byte[] seria = sha256.ComputeHash(Encoding.UTF8.GetBytes(passport.Seria));
             byte[] number = sha256.ComputeHash(Encoding.UTF8.GetBytes(passport.Number));
 
+            string password = await _passwordGenerator.GenerateAsync(passport, token);
+            string login = await _loginGenerator.GenerateAsync(fullName, token);
+            
             HashedPassport hashedPassport = new HashedPassport(seria, number);
 
-            return hashedPassport;
+            var result = await _writeUsersRepository.RegisterAsync(
+                fullName, 
+                hashedPassport,
+                login,
+                password,
+                token);
+
+            return result;
         }
 
-        public async Task<Result<SuccessRegisterDto>> TryToRegister(
-            FullName FullName, 
-            HashedPassport passport,
-            CancellationToken token)
+        public RegisterService(
+            IWriteUsersRepository  writeUsersRepository,
+            IPasswordGenerator passwordGenerator,
+            ILoginGenerator loginGenerator)
         {
-            throw new NotImplementedException();
+            _writeUsersRepository = writeUsersRepository;
+            _passwordGenerator = passwordGenerator;
+            _loginGenerator = loginGenerator;
         }
     }
 }
