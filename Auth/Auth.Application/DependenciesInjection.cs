@@ -1,9 +1,9 @@
 ﻿using Auth.Application.Abstraction;
-using Auth.Application.Implementetions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Auth.Application.Implementations;
 
 namespace Auth.Application
 {

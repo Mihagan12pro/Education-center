@@ -1,12 +1,12 @@
-﻿using Auth.Application.Abstraction;
-using Auth.Application.Dtos.Register;
-using Auth.Domain.ValueObjects;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
+using Auth.Application.Abstraction;
 using Auth.Application.Abstraction.Repositories;
+using Auth.Application.Dtos.Register;
 using Auth.Application.Infrastructure.Security;
+using Auth.Domain.ValueObjects;
 
-namespace Auth.Application.Implementetions
+namespace Auth.Application.Implementations
 {
     internal class RegisterService : IRegisterService
     {

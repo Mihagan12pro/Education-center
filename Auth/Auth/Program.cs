@@ -2,7 +2,9 @@ using Auth.Application;
 using Auth.Application.Abstraction;
 using Auth.Application.Dtos.Register;
 using Auth.Domain.ValueObjects;
+using Auth.PostgreSQL.DataAccess;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,5 +39,12 @@ apiGroup.MapPost(@"register", async (
 
     return Results.Ok(result);
 });
+
+using ( var  scope = app.Services.CreateScope() )
+{
+    var migrator =  scope.ServiceProvider.GetRequiredService<IMigrationBuilder>();
+
+    await migrator.MigrateAsync();
+}
 
 app.Run();
