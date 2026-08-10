@@ -2,7 +2,9 @@ using Auth.Application;
 using Auth.Application.Abstraction;
 using Auth.Application.Dtos.Register;
 using Auth.Domain.ValueObjects;
-using Auth.PostgreSQL.DataAccess;
+using Auth.Infrastructure.DataAccess;
+using Auth.Infrastructure.DataAccess.DataAccess;
+using Auth.Infrastructure.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Scalar.AspNetCore;
@@ -15,15 +17,19 @@ services.AddEndpointsApiExplorer();
 services.AddValidation();
 services.AddOpenApi("v1");
 
-services.AddServices();
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+    
+    services.AddDbServices(app.Configuration.GetRequiredSection("ConnectionStrings"));
 }
+
+
+services.AddApplicationServices();
+services.AddSecurityServices();
 
 var apiGroup = app.MapGroup(@"/auth/api/v1");
 

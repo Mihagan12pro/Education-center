@@ -7,7 +7,6 @@ public interface IWriteUsersRepository
 {
     Task<SuccessRegisterDto> RegisterAsync(
         FullName fullName,
-        HashedPassport passport,
         string password,
         string login,
         CancellationToken ct);

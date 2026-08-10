@@ -9,7 +9,7 @@ namespace Auth.Application
 {
     public static class DependenciesInjection
     {
-        public static IServiceCollection AddServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IRegisterService, RegisterService>();
 

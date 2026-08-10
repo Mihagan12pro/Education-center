@@ -1,9 +1,8 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-using Auth.Application.Abstraction;
+﻿using Auth.Application.Abstraction;
 using Auth.Application.Abstraction.Repositories;
 using Auth.Application.Dtos.Register;
 using Auth.Application.Infrastructure.Security;
+using Auth.Domain.Enums;
 using Auth.Domain.ValueObjects;
 
 namespace Auth.Application.Implementations
@@ -13,27 +12,34 @@ namespace Auth.Application.Implementations
         private readonly IWriteUsersRepository _writeUsersRepository;  
         private readonly IPasswordGenerator _passwordGenerator;
         private readonly ILoginGenerator _loginGenerator;
+        private readonly IHasher _hasher;
 
         public async Task<SuccessRegisterDto> TryToRegister(
             FullName fullName, 
             Passport passport,
             CancellationToken token)
         {
-            SHA256 sha256 = SHA256.Create();
+            var seria = _hasher.Hash(passport.Seria);
+            var number = _hasher.Hash(passport.Number);
 
-            byte[] seria = sha256.ComputeHash(Encoding.UTF8.GetBytes(passport.Seria));
-            byte[] number = sha256.ComputeHash(Encoding.UTF8.GetBytes(passport.Number));
+            string password = _passwordGenerator.Generate(
+                passport, 
+                Roles.Admin);
 
-            string password = await _passwordGenerator.GenerateAsync(passport, token);
-            string login = await _loginGenerator.GenerateAsync(fullName, token);
+            string hashedPassword = _hasher.Hash(password);
             
-            HashedPassport hashedPassport = new HashedPassport(seria, number);
+            string login = _loginGenerator.Generate(
+                fullName,
+                Roles.Admin);
+            
+            HashedPassport hashedPassport = new HashedPassport(
+                seria,
+                number);
 
             var result = await _writeUsersRepository.RegisterAsync(
                 fullName, 
-                hashedPassport,
                 login,
-                password,
+                hashedPassword,
                 token);
 
             return result;
@@ -42,11 +48,13 @@ namespace Auth.Application.Implementations
         public RegisterService(
             IWriteUsersRepository  writeUsersRepository,
             IPasswordGenerator passwordGenerator,
-            ILoginGenerator loginGenerator)
+            ILoginGenerator loginGenerator,
+            IHasher hasher)
         {
             _writeUsersRepository = writeUsersRepository;
             _passwordGenerator = passwordGenerator;
             _loginGenerator = loginGenerator;
+            _hasher = hasher;
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿using Auth.Domain.ValueObjects;
+﻿using Auth.Domain.Enums;
+using Auth.Domain.ValueObjects;
 
 namespace Auth.Application.Infrastructure.Security;
 
 public interface IPasswordGenerator
 {
-    Task<string> GenerateAsync(
+    string Generate(
         Passport passport,
-        CancellationToken token);
+        Roles role);
 }

@@ -14,7 +14,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Auth.Application\Auth.Application.csproj" />
-    <ProjectReference Include="..\Auth.PostgreSQL\Auth.PostgreSQL.csproj" />
+    <ProjectReference Include="..\Auth.Infrastructure.DataAccess\Auth.Infrastructure.DataAccess.csproj" />
+    <ProjectReference Include="..\Auth.Infrastructure.Security\Auth.Infrastructure.Security.csproj" />
     <ProjectReference Include="..\AuthDomain\Auth.Domain.csproj" />
   </ItemGroup>
 

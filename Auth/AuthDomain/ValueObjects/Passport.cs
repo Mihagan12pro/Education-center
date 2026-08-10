@@ -10,6 +10,6 @@ namespace Auth.Domain.ValueObjects
     );
 
     public record HashedPassport(
-        byte[] Seria, 
-        byte[] Number);
+        string Seria, 
+        string Number);
 }

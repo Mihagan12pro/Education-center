@@ -1,17 +1,23 @@
 ﻿using Auth.Application.Abstraction.Repositories;
+using Auth.Infrastructure.DataAccess.Repositories;
+using Auth.Infrastructure.DataAccess;
 using Auth.PostgreSQL.DataAccess;
-using Auth.PostgreSQL.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 
-namespace Auth.PostgreSQL;
+namespace Auth.Infrastructure.DataAccess;
 
 public static class DependenciesInjection
 {
     public static IServiceCollection AddDbServices(
-        this IServiceCollection services, IConfiguration  configuration)
+        this IServiceCollection services,
+        IConfigurationSection dbSection)
     {
-        services.AddDbContext<AuthDbContext>();
+        services.AddDbContext<AuthDbContext>((options) =>
+        {
+            options.UseNpgsql(dbSection.GetConnectionString("DefaultConnection"));
+        });
         
         services.AddScoped<IMigrationBuilder, MigratorBuilder>();
 

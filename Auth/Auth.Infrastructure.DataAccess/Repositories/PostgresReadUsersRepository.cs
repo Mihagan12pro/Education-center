@@ -1,6 +1,6 @@
 ﻿using Auth.Application.Abstraction.Repositories;
 
-namespace Auth.PostgreSQL.Repositories;
+namespace Auth.Infrastructure.DataAccess.Repositories;
 
 public class PostgresReadUsersRepository : IReadUsersRepository
 {

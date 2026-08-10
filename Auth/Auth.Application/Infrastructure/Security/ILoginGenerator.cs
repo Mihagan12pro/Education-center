@@ -1,10 +1,11 @@
 ﻿using Auth.Domain.ValueObjects;
+using Auth.Domain.Enums;
 
 namespace Auth.Application.Infrastructure.Security;
 
 public interface ILoginGenerator
 {
-    Task<string> GenerateAsync(
+    string Generate(
         FullName fullName,
-        CancellationToken token);
+        Roles role);
 }

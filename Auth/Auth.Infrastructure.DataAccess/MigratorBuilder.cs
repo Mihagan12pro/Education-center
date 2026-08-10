@@ -1,8 +1,9 @@
-﻿using Auth.PostgreSQL.DataAccess;
+﻿using Auth.Infrastructure.DataAccess;
+using Auth.PostgreSQL.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Auth.PostgreSQL;
+namespace Auth.Infrastructure.DataAccess;
 
 internal class MigratorBuilder : IMigrationBuilder
 {
